@@ -12,7 +12,13 @@ export default defineConfig(({ mode }) => {
 
     optimizeDeps:{
       include: ['@basicdev04/common-app'],
+      exclude: ['quill'],
 
-    }
+    },
+    build: {
+        commonjsOptions: {
+            transformMixedEsModules: true, // Transpile mixed modules
+        },
+    },
   }
 })
