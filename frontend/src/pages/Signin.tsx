@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Authin } from "../components/Authin"
-import { Quote } from "../components/Quote"
 import { useEffect } from "react";
+import { Quote } from "../components/Quote";
 
 export const Signin=()=>{
   const navigate=useNavigate();

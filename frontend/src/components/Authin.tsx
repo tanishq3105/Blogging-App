@@ -2,7 +2,7 @@ import { SignupType } from "@basicdev04/common-app";
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ClipLoader } from "react-spinners"; // Import the ClipLoader component
+import { Loader2, Mail, Lock } from 'lucide-react';
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -23,7 +23,7 @@ export const Authin = () => {
     
     setLoading(true);
     try {
-      const response = await axios.post(process.env.REACT_APP_DB_URL + '/api/v1/user/signin', {
+      const response = await axios.post(import.meta.env.VITE_BACKEND_URL + '/api/v1/user/signin', {
         name: postInputs.name,
         email: postInputs.email,
         password: postInputs.password
@@ -34,17 +34,10 @@ export const Authin = () => {
         const newExpiryTime = new Date().getTime() + oneWeekInMilliseconds;
         localStorage.setItem('token', jwt);
         localStorage.setItem('tokenExpiry', newExpiryTime.toString());
-        console.log(jwt);
-        if(localStorage.getItem('token'))
-        {
-
+        if(localStorage.getItem('token')) {
           navigate('/blogs');
         }
       }
-      
-      
-      
-      
     } catch (e) {
       toast.error('Failed to Sign In');
       console.error(e);
@@ -54,55 +47,83 @@ export const Authin = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center h-screen">
-      {loading ? (
-        <div className="flex items-center justify-center h-full">
-          <ClipLoader size={50} color={"#4A90E2"} loading={loading} /> {/* Display spinner */}
-        </div>
-      ) : (
-        <div className="flex justify-center">
-          <div>
-            <div className="text-white text-4xl font-bold">Sign In To Your Account</div>
-
-            <div className="text-l text-slate-400">
-              Don't have an account?
-              <a href="/signup" className="text-customBlue">
+    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 px-4">
+      <div className="w-full max-w-md">
+        {loading ? (
+          <div className="flex items-center justify-center">
+            <Loader2 className="w-12 h-12 text-cyan-400 animate-spin" />
+          </div>
+        ) : (
+          <div className="bg-gray-800 p-8 rounded-xl shadow-2xl ">
+            <h1 className="text-4xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-400">
+              Welcome Back
+            </h1>
+            <p className="text-gray-400 mb-8">
+              Don't have an account?{" "}
+              <a 
+                href="/signup" 
+                className="text-cyan-400 hover:text-cyan-300 transition-colors"
+              >
                 Sign Up
               </a>
-            </div>
-            <div className="flex flex-col">
-              <h1 className="mt-3 font-semibold text-white">Email</h1>
-              <input
-                type="text"
-                placeholder="johndoe@xyz.com"
-                className="border border-slate-400 mt-1 rounded-sm p-1 bg-customGrey text-black placeholder-grey-500 focus:outline-none focus:border-2 focus:border-customBlue"
-                onChange={(e) => setPostInputs(c => ({
-                  ...c,
-                  email: e.target.value
-                }))}
-              />
-              <h1 className="mt-3 font-semibold text-white">Password</h1>
-              <input
-                type="password"
-                className="border border-slate-400 mt-1 rounded-sm p-1 bg-customGrey focus:outline-none focus:border-2 focus:border-customBlue"
-                onChange={(e) => setPostInputs(c => ({
-                  ...c,
-                  password: e.target.value
-                }))}
-              />
-              <div className="flex justify-center mt-5">
-                <button
-                  className="flex items-center justify-center border-2 border-customBlue h-10 px-32 text-white hover:bg-customDarkBlue font-semibold rounded-md"
-                  onClick={handleSubmit}
-                >
-                  Sign In
-                </button>
+            </p>
+
+            <div className="space-y-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Email
+                </label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                  <input
+                    type="email"
+                    placeholder="johndoe@example.com"
+                    className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg py-2.5 pl-10 pr-4 placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all"
+                    onChange={(e) => setPostInputs(c => ({
+                      ...c,
+                      email: e.target.value
+                    }))}
+                  />
+                </div>
               </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Password
+                </label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                  <input
+                    type="password"
+                    className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg py-2.5 pl-10 pr-4 placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all"
+                    onChange={(e) => setPostInputs(c => ({
+                      ...c,
+                      password: e.target.value
+                    }))}
+                  />
+                </div>
+              </div>
+
+              <button
+                className="w-full py-3 px-4 rounded-lg bg-gradient-to-r from-cyan-500 to-teal-500 text-white font-medium hover:from-cyan-600 hover:to-teal-600 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                onClick={handleSubmit}
+                disabled={loading}
+              >
+                {loading ? (
+                  <Loader2 className="w-5 h-5 animate-spin mx-auto" />
+                ) : (
+                  'Sign In'
+                )}
+              </button>
             </div>
           </div>
-        </div>
-      )}
-      <ToastContainer />
+        )}
+        <ToastContainer
+          position="bottom-right"
+          theme="dark"
+          toastClassName="bg-gray-800 text-white"
+        />
+      </div>
     </div>
   );
 };
