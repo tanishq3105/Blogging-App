@@ -7,24 +7,18 @@ export default {
   theme: {
     extend: {
       colors: {
-        customDark: '#1f2833',
-        customDarkD: '#1b222c',
-        customBlue: '#66fcf1',
-        customGrey: '#c5c6c7',
-        customDarkBlue: '#45a29e',
-        customBlack: '#0b0c10'
-      },
-      keyframes: {
-        loadingBar: {
-          '0%': { left: '-100%', width: '100%' },
-          '50%': { left: '0%', width: '100%' },
-          '100%': { left: '100%', width: '10%' },
+        gray: {
+          900: '#0f172a',
+          800: '#1e293b',
+          700: '#334155',
+          600: '#475569',
+          400: '#94a3b8',
+          300: '#cbd5e1',
         },
-      },
-      animation: {
-        'loading-bar': 'loadingBar 2s infinite',
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/typography'),
+  ],
 }

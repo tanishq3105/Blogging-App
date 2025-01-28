@@ -1,30 +1,10 @@
-export const Loader=()=>{
-    return(
-        <div className="bg-custom-dark">
-            <div className="max-w-4xl mx-auto px-4 py-8">
-        <div className="animate-pulse  rounded-lg">
-          <div className="h-4 bg-gray-300 rounded my-2 w-4/5"></div>
-          <div className="h-4 bg-gray-300 rounded my-2 w-3/5"></div>
-          <div className="h-4 bg-gray-300 rounded my-2 w-4/6"></div>
-          <div className="h-4 bg-gray-300 rounded my-2 w-5/6"></div>
-        </div>
+import { Loader2 } from 'lucide-react'
+
+
+export default function Loader() {
+  return (
+    <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <Loader2 className="w-12 h-12 text-cyan-400 animate-spin" />
       </div>
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <div className="animate-pulse  rounded-lg">
-          <div className="h-4 bg-gray-300 rounded my-2 w-4/5"></div>
-          <div className="h-4 bg-gray-300 rounded my-2 w-3/5"></div>
-          <div className="h-4 bg-gray-300 rounded my-2 w-4/6"></div>
-          <div className="h-4 bg-gray-300 rounded my-2 w-5/6"></div>
-        </div>
-      </div>
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <div className="animate-pulse  rounded-lg">
-          <div className="h-4 bg-gray-300 rounded my-2 w-4/5"></div>
-          <div className="h-4 bg-gray-300 rounded my-2 w-3/5"></div>
-          <div className="h-4 bg-gray-300 rounded my-2 w-4/6"></div>
-          <div className="h-4 bg-gray-300 rounded my-2 w-5/6"></div>
-        </div>
-      </div>
-        </div>
-    )
+  )
 }

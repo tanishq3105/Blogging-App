@@ -19,7 +19,7 @@ userRouter.use('/user-details', async (c, next) => {
   const jwt = c.req.header('Authorization') || "";
   if (!jwt) {
     c.status(401);
-    return c.json({ error: "jwt not found" });
+    return c.json({ error: "jwt not found please recheck it" });
   }
   const token = jwt.split(' ')[1];
   const payload = await verify(token, c.env.JWT_SECRET);
@@ -142,7 +142,8 @@ userRouter.post('/signup', async (c) => {
         },
         select:{
           id:true,
-          name:true
+          name:true,
+          email:true
         }
       })
       if(!userId)

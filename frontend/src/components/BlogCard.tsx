@@ -1,108 +1,53 @@
-import { Link } from "react-router-dom";
+import { Clock } from "lucide-react"
+import type { BlogPost } from "../types/blog"
+import { Avatar } from "./Avatar"
+import { stripHtml } from "../hooks/stripHtml"
+import { getReadTime } from "../hooks/getReadTime"
+import { Link } from "react-router-dom"
 
 interface BlogCardProps {
-  authorName: string;
-  title: string;
-  content: string;
-  publishedDate: string;
-  id: number;
-  authorId?: string;
-  link: string;
-  imageUrl: string;
-}
+  post: BlogPost,
+  link?: string
+} 
 
-export const BlogCard = ({
-  authorName,
-  title,
-  content,
-  publishedDate,
-  id,
-  link,
-  imageUrl,
-}: BlogCardProps) => {
-  function stripHtml(html: string) {
-    const div = document.createElement("div");
-    div.innerHTML = html;
-    return div.textContent || div.innerText || "";
-  }
+export const BlogCard = ({ post, link }: BlogCardProps) => {
+  const content = stripHtml(post.content)
+  const time = getReadTime(post.content)
 
   return (
-    <Link to={`/${link}/${id}`}>
-      <div className="border-b-2 border-customBlack pb-4 w-full max-w-screen-lg cursor-pointer pt-1 mx-auto">
-        {/* Flex container for aligning content and image */}
-        <div className="flex justify-between items-center px-4 md:px-0">
-          {/* Left side: Text content */}
-          <div className="flex-1 pr-4">
-            <div className="flex items-center mb-2">
-              <div className="flex justify-center flex-col">
-                <Avatar author={authorName} size={20} />
-              </div>
-              <div className="font-semibold pl-2 text-xs font-thin md:text-sm text-white ">
-                {authorName}
-              </div>
-              <div className="pl-2 font-thin text-sm flex flex-col justify-center text-customGrey">
-                {publishedDate}
+    <Link to={link +'/' + post.id} className=" h-full">
+      <article className="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden w-[400px] sm:transition-all duration-300 ease-in-out sm:hover:scale-105 sm:hover:shadow-lg sm:hover:shadow-cyan-500/50 sm:hover:cursor-pointer h-full flex flex-col">
+        <div className="relative pb-[56.25%]">
+          <img
+            src={
+              post.imageUrl ||
+              "https://media.istockphoto.com/id/1147544806/vector/no-thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=Ni8CpW8dNAV0NrS6Odo5csGcWUySFydNki9FYi1XHYo="
+            }
+            alt={post.title}
+            className="absolute inset-0 w-full h-full object-cover p-2 rounded-xl"
+          />
+        </div>
+        <div className="p-6 flex flex-col flex-grow">
+          <h2 className="text-xl font-semibold text-white mb-2 hover:text-cyan-400 transition-colors line-clamp-2">
+            {post.title}
+          </h2>
+          <p className="text-gray-400 mb-4 line-clamp-3 flex-grow">{content}</p>
+          <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-700">
+            <div className="flex items-center space-x-3">
+              <Avatar author={post.author?.name as string} size={"w-8 h-8"} />
+              <div>
+                <p className="text-sm font-medium text-white">{post.author?.name}</p>
+                <p className="text-xs text-gray-400">{post.publishedDate}</p>
               </div>
             </div>
-
-            <div className="text-xl md:text-2xl font-bold pt-1 text-customDarkBlue hover:text-customBlue">
-              {title}
-            </div>
-            <div className="font-thin text-md md:text-lg text-white">
-              {stripHtml(content).slice(0, 100) + "..."}
-            </div>
-            <div className="text-customGrey text-sm md:text-md font-thin pt-3">{`${Math.ceil(
-              stripHtml(content).length / 100
-            )} min read`}</div>
-          </div>
-
-          {/* Right side: Image */}
-          <div className="flex-shrink-0">
-            <div className="h-[120px] w-[200px] md:h-[170px] md:w-[300px] border text-white text-sm">
-              <img
-                src={imageUrl}
-                alt="Blog Image"
-                className="h-full w-full object-cover"
-              />
+            <div className="flex items-center text-gray-400 text-sm">
+              <Clock size={14} className="mr-1" />
+              {time} min read
             </div>
           </div>
         </div>
-      </div>
+      </article>
     </Link>
-  );
-};
-
-interface AvatarProps {
-  author: string;
-  size: number;
+  )
 }
 
-export function Avatar({ author, size }: AvatarProps) {
-  const getColorFromName = (name: string): string => {
-    const colors = [
-      "bg-blue-500",
-      "bg-red-500",
-      "bg-green-500",
-      "bg-yellow-500",
-      "bg-purple-500",
-      "bg-indigo-500",
-      "bg-pink-500",
-    ];
-    const index = name.length % colors.length;
-    return colors[index];
-  };
-
-  const first = author[0];
-  const avatarColorClass = getColorFromName(author);
-
-  return (
-    <div>
-      <div
-        className={`relative inline-flex items-center justify-center overflow-hidden rounded-full ${avatarColorClass}`}
-        style={{ width: size, height: size }}
-      >
-        <span className="text-sm text-white">{first}</span>
-      </div>
-    </div>
-  );
-}

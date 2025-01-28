@@ -19,6 +19,7 @@ model User {
   name     String?
   password String
   posts    Post[]
+  bookmark Bookmark[]
 }
 
 model Post {
@@ -29,5 +30,16 @@ model Post {
   author    User?   @relation(fields: [authorId], references: [id])
   authorId  String   
   imageUrl   String
+  bookmark  Bookmark[]
   
+}
+
+model Bookmark {
+  id       String @id @default(uuid())
+  userId   String
+  postId   String
+  user     User?   @relation(fields: [userId], references: [id])
+  post     Post?  @relation(fields: [postId], references: [id])
+
+  @@unique([userId, postId]) // Ensures a user can bookmark a post only once
 }

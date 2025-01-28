@@ -3,8 +3,8 @@ import { Hono } from 'hono'
 
 import { PrismaClient } from '@prisma/client/edge'
 import { withAccelerate } from '@prisma/extension-accelerate'
-import { decode, sign, verify } from 'hono/jwt';// Replace with your actual JWT verification import
-import { createPostInput, CreatePostType, updatePostInput } from '@basicdev04/common-app';
+import { verify } from 'hono/jwt';// Replace with your actual JWT verification import
+import { createPostInput, updatePostInput } from '@basicdev04/common-app';
 
 
 export const blogRouter = new Hono<{
@@ -26,7 +26,6 @@ blogRouter.use('/*', async (c, next) => {
 
   const token = jwt.split(' ')[1];
   const secret =  c.env.JWT_SECRET;
-  console.log(secret);
   if (!secret) {
     c.status(500);
     return c.json({ error: "JWT_SECRET is not defined" });
@@ -131,9 +130,17 @@ blogRouter.get('/post/:id', async (c) => {
       id: true,
       publishedDate:true,
       authorId:true,
+      imageUrl:true,
       author: {
         select: {
           name:true
+        }
+      },
+      bookmark:{
+        select:{
+          id:true,
+          userId:true,
+          postId:true,
         }
       }
     }
@@ -248,8 +255,5 @@ blogRouter.delete('/delete',async(c)=>{
   })
 
   return c.text('post deleted');
-
-
-
 
 })
